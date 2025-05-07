@@ -2,6 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Form, Table } from 'react-bootstrap';
 import { getHealthcareWorkforceData, getHealthIndicators, getHealthcareFacilities, getPopulationData } from '../api/healthcareAPI';
 import { HealthcareWorker, HealthIndicator, HealthcareFacility, PopulationData } from '../models/types';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title } from 'chart.js';
+import { Pie, Bar } from 'react-chartjs-2';
+
+// Register ChartJS components
+ChartJS.register(ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const DataDashboard: React.FC = () => {
   const [workforceData, setWorkforceData] = useState<HealthcareWorker[]>([]);
@@ -89,10 +94,117 @@ const DataDashboard: React.FC = () => {
     return { rural: ruralFacilities, urban: urbanFacilities };
   };
   
+  // Prepare chart data
+  const getWorkforceChartData = () => {
+    if (workforceData.length === 0) return null;
+    
+    const filteredData = selectedState === "All India" 
+      ? workforceData 
+      : workforceData.filter(w => w.region === selectedState || w.stateCode === selectedState);
+    
+    // Group by type and sum counts
+    const typeMap = new Map<string, number>();
+    filteredData.forEach(worker => {
+      const currentCount = typeMap.get(worker.type) || 0;
+      typeMap.set(worker.type, currentCount + worker.count);
+    });
+    
+    // Prepare data for pie chart
+    return {
+      labels: Array.from(typeMap.keys()).map(type => {
+        // Convert type ids to readable names
+        switch(type) {
+          case 'doctor': return 'Doctors';
+          case 'nurse': return 'Nurses';
+          case 'community-health-worker': return 'CHWs';
+          case 'specialist': return 'Specialists';
+          case 'paramedic': return 'Paramedics';
+          default: return type.charAt(0).toUpperCase() + type.slice(1);
+        }
+      }),
+      datasets: [
+        {
+          data: Array.from(typeMap.values()),
+          backgroundColor: [
+            'rgba(56, 101, 163, 0.8)', // primary
+            'rgba(99, 163, 117, 0.8)', // secondary
+            'rgba(237, 107, 91, 0.8)', // accent
+            'rgba(108, 117, 125, 0.8)', // gray
+            'rgba(255, 193, 7, 0.8)'   // yellow
+          ],
+          borderColor: [
+            'rgba(56, 101, 163, 1)',
+            'rgba(99, 163, 117, 1)',
+            'rgba(237, 107, 91, 1)',
+            'rgba(108, 117, 125, 1)',
+            'rgba(255, 193, 7, 1)'
+          ],
+          borderWidth: 1,
+        },
+      ],
+    };
+  };
+  
+  const getHealthIndicatorsChartData = () => {
+    if (healthIndicators.length === 0) return null;
+    
+    const relevantIndicators = selectedState === "All India" 
+      ? healthIndicators.filter(h => h.state === "All India") 
+      : healthIndicators.filter(h => h.state === selectedState);
+    
+    const rural = relevantIndicators.find(h => h.rural);
+    const urban = relevantIndicators.find(h => !h.rural);
+    
+    if (!rural || !urban) return null;
+    
+    return {
+      labels: ['Healthcare Access', 'Infant Mortality Rate', 'Maternal Mortality Rate', 'Life Expectancy'],
+      datasets: [
+        {
+          label: 'Rural',
+          data: [
+            rural.accessToHealthcare || 0,
+            rural.infantMortalityRate || 0,
+            rural.maternalMortalityRate || 0,
+            rural.lifeExpectancy || 0
+          ],
+          backgroundColor: 'rgba(99, 163, 117, 0.6)',
+          borderColor: 'rgba(99, 163, 117, 1)',
+          borderWidth: 1
+        },
+        {
+          label: 'Urban',
+          data: [
+            urban.accessToHealthcare || 0,
+            urban.infantMortalityRate || 0,
+            urban.maternalMortalityRate || 0,
+            urban.lifeExpectancy || 0
+          ],
+          backgroundColor: 'rgba(56, 101, 163, 0.6)',
+          borderColor: 'rgba(56, 101, 163, 1)',
+          borderWidth: 1
+        }
+      ]
+    };
+  };
+  
   const workforceStats = getWorkforceStats();
   const accessStats = getAccessStats();
   const populationStats = getRuralUrbanPopulation();
   const facilityStats = getFacilityStats();
+  const workforceChartData = getWorkforceChartData();
+  const healthIndicatorsChartData = getHealthIndicatorsChartData();
+  
+  // Bar chart options
+  const barChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  };
   
   // Get unique states for filter
   const getUniqueStates = (): string[] => {
@@ -242,10 +354,14 @@ const DataDashboard: React.FC = () => {
                   <Card className="shadow-sm border-0 h-100">
                     <Card.Body>
                       <h4 className="mb-4">Healthcare Workforce by Type</h4>
-                      <div className="bg-light p-4 rounded" style={{ minHeight: '300px' }}>
-                        <div className="d-flex justify-content-center align-items-center h-100">
-                          <p className="text-muted">[Chart will be rendered here]</p>
-                        </div>
+                      <div className="bg-light p-4 rounded" style={{ height: '300px' }}>
+                        {workforceChartData ? (
+                          <Pie data={workforceChartData} options={{ responsive: true, maintainAspectRatio: false }} />
+                        ) : (
+                          <div className="d-flex justify-content-center align-items-center h-100">
+                            <p className="text-muted">No data available</p>
+                          </div>
+                        )}
                       </div>
                     </Card.Body>
                   </Card>
@@ -254,10 +370,17 @@ const DataDashboard: React.FC = () => {
                   <Card className="shadow-sm border-0 h-100">
                     <Card.Body>
                       <h4 className="mb-4">Key Health Indicators</h4>
-                      <div className="bg-light p-4 rounded" style={{ minHeight: '300px' }}>
-                        <div className="d-flex justify-content-center align-items-center h-100">
-                          <p className="text-muted">[Chart will be rendered here]</p>
-                        </div>
+                      <div className="bg-light p-4 rounded" style={{ height: '300px' }}>
+                        {healthIndicatorsChartData ? (
+                          <Bar 
+                            data={healthIndicatorsChartData} 
+                            options={barChartOptions} 
+                          />
+                        ) : (
+                          <div className="d-flex justify-content-center align-items-center h-100">
+                            <p className="text-muted">No data available</p>
+                          </div>
+                        )}
                       </div>
                     </Card.Body>
                   </Card>
