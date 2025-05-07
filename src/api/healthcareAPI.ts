@@ -9,11 +9,13 @@ import {
 
 // Base URLs for different APIs
 const INDIA_COVID_API = 'https://api.rootnet.in/covid19-in';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const HEALTH_FACILITY_API = 'https://api.data.gov.in/resource';
 const INDIA_HEALTH_API = 'https://data.incovid19.org/v4/min';
 const WHO_API = 'https://ghoapi.azureedge.net/api';
 
 // API Key for Data.gov.in - would need to be replaced with a real key
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const API_KEY = process.env.REACT_APP_INDIA_DATA_API_KEY || 'demo-key';
 
 // Toggle between mock and real data
@@ -664,7 +666,9 @@ export const getPolicySolutions = async (): Promise<PolicySolution[]> => {
       }
     ];
   } catch (error) {
-    return handleApiError(error);
+    handleApiError(error);
+    // Return an empty array to prevent unreachable code warning
+    return [];
   }
 };
 

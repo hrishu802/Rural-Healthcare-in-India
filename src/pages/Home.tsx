@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import { getHealthcareWorkforceData, getHealthIndicators } from '../api/healthcareAPI';
 import { HealthcareWorker, HealthIndicator } from '../models/types';
 
