@@ -177,7 +177,7 @@ const Home: React.FC = () => {
             </Col>
             <Col lg={6}>
               <img 
-                src="https://images.unsplash.com/photo-1584515979956-d9f6e5d09980?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                src="/images/rural-healthcare.jpg"
                 alt="Rural healthcare in India" 
                 className="img-fluid rounded shadow"
                 style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
