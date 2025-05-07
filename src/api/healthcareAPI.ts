@@ -721,8 +721,8 @@ export const getWHOHealthWorkforceData = async (countryCode: string = 'IND'): Pr
       };
     }
   } catch (error) {
-    handleApiError(error);
-    // Return empty data to prevent unreachable code warning
+    console.error('Error in getWHOHealthWorkforceData:', error);
+    // Return empty data instead of using handleApiError which might throw
     return {
       countryCode,
       countryName: 'Unknown',

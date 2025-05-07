@@ -2,6 +2,7 @@
   --primary: #3865a3;
   --secondary: #63a375;
   --accent: #ed6b5b;
+  --accent-rgb: 237, 107, 91;
   --background: #f8f9fa;
   --text-dark: #343a40;
   --text-light: #f8f9fa;
@@ -23,14 +24,7 @@ main {
   flex: 1;
 }
 
-.navbar {
-  background-color: var(--primary);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.navbar-brand, .nav-link {
-  color: var(--text-light) !important;
-}
+/* Navbar styles moved to Navigation.css */
 
 .hero-section {
   background-color: var(--primary);
