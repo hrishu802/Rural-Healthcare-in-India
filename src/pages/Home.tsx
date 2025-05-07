@@ -73,7 +73,7 @@ const Home: React.FC = () => {
             </Col>
             <Col lg={5}>
               <div className="p-4 bg-white rounded shadow-sm">
-                <h3 className="text-primary mb-4">Quick Stats</h3>
+                <h3 style={{ color: '#e63946' }} className="mb-4">Quick Stats</h3>
                 {loading ? (
                   <p>Loading statistics...</p>
                 ) : (
@@ -81,13 +81,13 @@ const Home: React.FC = () => {
                     <div className="mb-3">
                       <h5>Doctor Distribution</h5>
                       <p className="mb-0">
-                        <strong>{doctorData.ratio}x</strong> more doctors in urban areas than rural areas
+                        <span style={{ color: '#e63946', fontWeight: 'bold', fontSize: '1.2rem' }}>{doctorData.ratio}x</span> more doctors in urban areas than rural areas
                       </p>
                     </div>
                     <div className="mb-3">
                       <h5>Healthcare Access Gap</h5>
                       <p className="mb-0">
-                        <strong>{accessData.gap}%</strong> difference in healthcare access between urban and rural areas
+                        <span style={{ color: '#e63946', fontWeight: 'bold', fontSize: '1.2rem' }}>{accessData.gap}%</span> difference in healthcare access between urban and rural areas
                       </p>
                     </div>
                     <div>

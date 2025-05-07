@@ -454,13 +454,12 @@ export const getHealthIndicators = async (
       ];
     }
     
+    let transformedData: HealthIndicator[] = [];
+    
     try {
       // Get COVID-19 data as a proxy for health indicators by state
       const response = await axios.get(`${INDIA_HEALTH_API}/data.min.json`);
       const hospitalsResponse = await axios.get(`${INDIA_COVID_API}/hospitals/beds`);
-      
-      // Transform the data to match our HealthIndicator type
-      const transformedData: HealthIndicator[] = [];
       
       if (response.data && hospitalsResponse.data && hospitalsResponse.data.data) {
         // Create health indicators for all India
@@ -534,40 +533,57 @@ export const getHealthIndicators = async (
           });
         }
       }
-      
-      // Filter based on provided parameters
-      let filteredData = transformedData;
-      
-      if (state) {
-        filteredData = filteredData.filter(item => item.state === state);
-      }
-      
-      if (rural !== undefined) {
-        filteredData = filteredData.filter(item => item.rural === rural);
-      }
-      
-      if (year) {
-        filteredData = filteredData.filter(item => item.year === year);
-      }
-      
-      return filteredData;
-    } catch (error) {
-      // Log the error and return a minimal set of data
-      console.error("Error in getHealthIndicators:", error);
+    } catch (innerError) {
+      console.error('Error fetching real health indicator data:', innerError);
+      // Return mock data on API failure
+      // The following will become the value of transformedData
       return [
         { 
-          year: new Date().getFullYear(), 
+          year: 2022, 
           state: 'All India', 
           rural: true, 
           infantMortalityRate: 40,
           maternalMortalityRate: 130,
           lifeExpectancy: 68,
           accessToHealthcare: 65
+        },
+        { 
+          year: 2022, 
+          state: 'All India', 
+          rural: false, 
+          infantMortalityRate: 25,
+          maternalMortalityRate: 90,
+          lifeExpectancy: 72,
+          accessToHealthcare: 85
         }
       ];
     }
+    
+    // Filter based on provided parameters
+    if (state) {
+      transformedData = transformedData.filter(item => item.state === state);
+    }
+    
+    if (rural !== undefined) {
+      transformedData = transformedData.filter(item => item.rural === rural);
+    }
+    
+    if (year) {
+      transformedData = transformedData.filter(item => item.year === year);
+    }
+    
+    return transformedData;
   } catch (error) {
-    return handleApiError(error);
+    console.error('Error in getHealthIndicators:', error);
+    return [{ 
+      year: new Date().getFullYear(), 
+      state: 'All India', 
+      rural: true, 
+      infantMortalityRate: 40,
+      maternalMortalityRate: 130,
+      lifeExpectancy: 68,
+      accessToHealthcare: 65
+    }];
   }
 };
 
