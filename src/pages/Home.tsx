@@ -156,6 +156,21 @@ const Home: React.FC = () => {
               </Card>
             </Col>
           </Row>
+          
+          <Row className="mt-3">
+            <Col md={4} className="mb-4 mx-auto">
+              <Card className="h-100">
+                <Card.Body>
+                  <div className="mb-3 fs-1 text-primary">⚙️</div>
+                  <Card.Title>Stock Flow Model</Card.Title>
+                  <Card.Text>
+                    Simulate rural healthcare workforce dynamics with an interactive system dynamics model to test different policy interventions.
+                  </Card.Text>
+                  <Button variant="primary" href="/stock-flow">Explore Model</Button>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
         </Container>
       </section>
       

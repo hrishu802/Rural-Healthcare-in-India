@@ -9,6 +9,7 @@ import Research from './pages/Research';
 import DataDashboard from './pages/DataDashboard';
 import CLDAnalysis from './pages/CLDAnalysis';
 import EPSAnalysis from './pages/EPSAnalysis';
+import RuralHealthcareModel from './pages/StockFlow';
 
 // Components
 import Navigation from './components/Navigation';
@@ -26,6 +27,7 @@ function App() {
             <Route path="/dashboard" element={<DataDashboard />} />
             <Route path="/cld-analysis" element={<CLDAnalysis />} />
             <Route path="/eps-analysis" element={<EPSAnalysis />} />
+            <Route path="/stock-flow" element={<RuralHealthcareModel />} />
           </Routes>
         </main>
         <Footer />

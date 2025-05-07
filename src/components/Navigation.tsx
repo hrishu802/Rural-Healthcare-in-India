@@ -50,6 +50,13 @@ const Navigation: React.FC = () => {
             >
               EPS Analysis
             </Nav.Link>
+            <Nav.Link 
+              as={Link} 
+              to="/stock-flow" 
+              active={location.pathname === '/stock-flow'}
+            >
+              Stock Flow Model
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
