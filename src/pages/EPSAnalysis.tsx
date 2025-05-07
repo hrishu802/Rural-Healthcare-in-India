@@ -41,6 +41,88 @@ const EPSAnalysis: React.FC = () => {
     }
   };
   
+  // Get actual color value from semantic level
+  const getColorValue = (level: string): string => {
+    switch (level) {
+      case 'high':
+        return '#198754'; // success green
+      case 'medium':
+        return '#ffc107'; // warning yellow
+      case 'low':
+        return '#dc3545'; // danger red
+      case 'short-term':
+        return '#0dcaf0'; // info blue
+      case 'medium-term':
+        return '#0d6efd'; // primary blue
+      case 'long-term':
+        return '#6c757d'; // secondary gray
+      default:
+        return '#6c757d'; // default to secondary
+    }
+  };
+  
+  // Calculate percentage for the data bar
+  const calculatePercentage = (level: string): number => {
+    switch (level) {
+      case 'high':
+        return 90;
+      case 'medium':
+        return 60;
+      case 'low':
+        return 30;
+      case 'short-term':
+        return 90;
+      case 'medium-term':
+        return 60;
+      case 'long-term':
+        return 30;
+      default:
+        return 50;
+    }
+  };
+  
+  // Data Bar Component
+  const DataBar = ({ label, level, type }: { label: string, level: string, type: 'impact' | 'cost' | 'time' }) => {
+    const percentage = calculatePercentage(level);
+    const color = getColorValue(level);
+    
+    return (
+      <div className="mb-3">
+        <div className="d-flex justify-content-between align-items-center mb-1">
+          <label className="small text-muted mb-0">{label}</label>
+          <span className="fw-medium">{level.charAt(0).toUpperCase() + level.slice(1)}</span>
+        </div>
+        <div className="position-relative">
+          <div 
+            className="progress position-absolute top-0 start-0 rounded-pill" 
+            style={{ 
+              height: '6px', 
+              width: '100%', 
+              backgroundColor: '#e9ecef',
+              zIndex: 1
+            }}
+          >
+            <div 
+              className="progress-bar" 
+              style={{ 
+                width: `${percentage}%`, 
+                backgroundColor: color,
+                transition: 'width 0.3s ease-in-out',
+                borderRadius: '3px'
+              }}
+            ></div>
+          </div>
+          <div style={{ height: '6px' }}></div>
+        </div>
+        <div className="d-flex justify-content-between mt-1">
+          <small className="text-muted">{type === 'impact' || type === 'cost' ? 'Low' : 'Long-term'}</small>
+          <small className="text-muted">{type === 'impact' || type === 'cost' ? 'Medium' : 'Medium-term'}</small>
+          <small className="text-muted">{type === 'impact' || type === 'cost' ? 'High' : 'Short-term'}</small>
+        </div>
+      </div>
+    );
+  };
+  
   return (
     <>
       <section className="py-5 bg-light">
@@ -113,6 +195,31 @@ const EPSAnalysis: React.FC = () => {
                       <Card.Body>
                         <h4 className="mb-3">{policy.name}</h4>
                         <p>{policy.description}</p>
+                        
+                        {/* Data Bar Section */}
+                        <div className="row mt-4 mb-3">
+                          <div className="col-md-4">
+                            <DataBar 
+                              label="Impact Level" 
+                              level={policy.impactLevel} 
+                              type="impact" 
+                            />
+                          </div>
+                          <div className="col-md-4">
+                            <DataBar 
+                              label="Implementation Cost" 
+                              level={policy.implementationCost} 
+                              type="cost" 
+                            />
+                          </div>
+                          <div className="col-md-4">
+                            <DataBar 
+                              label="Implementation Timeframe" 
+                              level={policy.timeFrame} 
+                              type="time" 
+                            />
+                          </div>
+                        </div>
                         
                         <div className="row mt-4">
                           <div className="col-md-4 mb-3">
