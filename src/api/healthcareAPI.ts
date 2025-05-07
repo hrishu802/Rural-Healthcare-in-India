@@ -552,44 +552,17 @@ export const getHealthIndicators = async (
       
       return filteredData;
     } catch (error) {
-      console.error('Error fetching real health indicator data:', error);
-      // Fall back to mock data if API call fails
+      // Log the error and return a minimal set of data
+      console.error("Error in getHealthIndicators:", error);
       return [
         { 
-          year: 2022, 
+          year: new Date().getFullYear(), 
           state: 'All India', 
           rural: true, 
           infantMortalityRate: 40,
           maternalMortalityRate: 130,
           lifeExpectancy: 68,
           accessToHealthcare: 65
-        },
-        { 
-          year: 2022, 
-          state: 'All India', 
-          rural: false, 
-          infantMortalityRate: 25,
-          maternalMortalityRate: 90,
-          lifeExpectancy: 72,
-          accessToHealthcare: 85
-        },
-        { 
-          year: 2022, 
-          state: 'Kerala', 
-          rural: true, 
-          infantMortalityRate: 10,
-          maternalMortalityRate: 40,
-          lifeExpectancy: 76,
-          accessToHealthcare: 90
-        },
-        { 
-          year: 2022, 
-          state: 'Bihar', 
-          rural: true, 
-          infantMortalityRate: 55,
-          maternalMortalityRate: 165,
-          lifeExpectancy: 65,
-          accessToHealthcare: 45
         }
       ];
     }
