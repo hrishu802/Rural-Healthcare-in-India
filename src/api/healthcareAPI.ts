@@ -535,9 +535,8 @@ export const getHealthIndicators = async (
       }
     } catch (innerError) {
       console.error('Error fetching real health indicator data:', innerError);
-      // Return mock data on API failure
-      // The following will become the value of transformedData
-      return [
+      // Set transformed data to mock data on API failure instead of returning directly
+      transformedData = [
         { 
           year: 2022, 
           state: 'All India', 
