@@ -677,9 +677,8 @@ export const getPolicySolutions = async (): Promise<PolicySolution[]> => {
       }
     ];
   } catch (error) {
-    handleApiError(error);
-    // Return an empty array to prevent unreachable code warning
-    return [];
+    console.error('Error in getPolicySolutions:', error);
+    return []; // Just return empty array directly instead of calling handleApiError
   }
 };
 
