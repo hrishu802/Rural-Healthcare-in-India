@@ -162,7 +162,7 @@ const Home: React.FC = () => {
       <section className="section">
         <Container>
           <Row className="align-items-center">
-            <Col lg={6} className="mb-4 mb-lg-0">
+            <Col lg={12} className="mb-4 mb-lg-0">
               <h2 className="section-title">Key Challenges</h2>
               <ul className="fs-5">
                 <li className="mb-2">Inadequate infrastructure in rural healthcare facilities</li>
@@ -174,14 +174,6 @@ const Home: React.FC = () => {
               <Button variant="accent" href="/research" className="mt-3">
                 Read the Research
               </Button>
-            </Col>
-            <Col lg={6}>
-              <img 
-                src="/images/rural-healthcare.jpg"
-                alt="Rural healthcare in India" 
-                className="img-fluid rounded shadow"
-                style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
-              />
             </Col>
           </Row>
         </Container>

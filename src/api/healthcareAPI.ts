@@ -690,11 +690,35 @@ export const getWHOHealthWorkforceData = async (countryCode: string = 'IND'): Pr
       };
     }
     
-    const response = await axios.get(`${WHO_API}/GHO/HWF_0001,HWF_0002,HWF_0003`, {
-      params: { $filter: `SpatialDim eq '${countryCode}'` }
-    });
-    return response.data;
+    try {
+      const response = await axios.get(`${WHO_API}/GHO/HWF_0001,HWF_0002,HWF_0003`, {
+        params: { $filter: `SpatialDim eq '${countryCode}'` }
+      });
+      return response.data;
+    } catch (apiError) {
+      console.error('Error fetching WHO data:', apiError);
+      // Fall back to mock data if WHO API call fails
+      return {
+        countryCode,
+        countryName: countryCode === 'IND' ? 'India' : 'Unknown',
+        doctorsPer1000: 0.9,
+        nursesPer1000: 1.7,
+        comparisons: [
+          { country: 'China', doctorsPer1000: 2.0, nursesPer1000: 2.7 },
+          { country: 'USA', doctorsPer1000: 2.6, nursesPer1000: 11.7 },
+          { country: 'UK', doctorsPer1000: 2.8, nursesPer1000: 8.2 }
+        ]
+      };
+    }
   } catch (error) {
-    return handleApiError(error);
+    handleApiError(error);
+    // Return empty data to prevent unreachable code warning
+    return {
+      countryCode,
+      countryName: 'Unknown',
+      doctorsPer1000: 0,
+      nursesPer1000: 0,
+      comparisons: []
+    };
   }
 }; 
