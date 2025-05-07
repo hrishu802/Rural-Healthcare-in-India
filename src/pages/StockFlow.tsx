@@ -2,6 +2,18 @@ import { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
+// Define types for the simulation data
+interface SimulationDataPoint {
+  year: number;
+  workers: number;
+  trust: number;
+  health: number;
+  hiringRate: number;
+  migrationRate: number;
+  jobSatisfaction: number;
+  workloadPerWorker: number;
+}
+
 export default function RuralHealthcareModel() {
   // Model Parameters (Initial values and constants)
   const [params, setParams] = useState({
@@ -25,7 +37,7 @@ export default function RuralHealthcareModel() {
   // State variables
   const [timeStep, setTimeStep] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
-  const [simulationData, setSimulationData] = useState([]);
+  const [simulationData, setSimulationData] = useState<SimulationDataPoint[]>([]);
   const [stocks, setStocks] = useState({
     workers: params.initialWorkers,
     trust: params.initialTrust,
@@ -45,7 +57,7 @@ export default function RuralHealthcareModel() {
   };
 
   // Handle parameter changes
-  const handleParamChange = (param, value) => {
+  const handleParamChange = (param: string, value: string) => {
     setParams(prev => ({
       ...prev,
       [param]: parseFloat(value)
@@ -125,7 +137,7 @@ export default function RuralHealthcareModel() {
 
   // Run simulation until time limit
   useEffect(() => {
-    let interval;
+    let interval: NodeJS.Timeout | undefined;
     if (isRunning && timeStep < params.simulationYears) {
       interval = setInterval(() => {
         calculateStep();
@@ -134,8 +146,10 @@ export default function RuralHealthcareModel() {
       setIsRunning(false);
     }
 
-    return () => clearInterval(interval);
-  }, [isRunning, timeStep, stocks, params]);
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isRunning, timeStep, stocks, params, calculateStep]);
 
   // Render the model UI
   return (
