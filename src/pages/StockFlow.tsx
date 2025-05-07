@@ -47,6 +47,19 @@ export default function RuralHealthcareModel() {
     trust: params.initialTrust,
     health: params.initialHealth
   });
+  
+  // Slider interaction state
+  const [speedDragging, setSpeedDragging] = useState(false);
+  const [speedTooltipPosition, setSpeedTooltipPosition] = useState(0);
+  
+  // Calculate speed percentage for the simulation speed slider
+  const speedPercentage = 100 - ((params.simulationSpeed - 100) / 9);
+  
+  // Update speed tooltip position when speed changes
+  useEffect(() => {
+    const newSpeedPercentage = 100 - ((params.simulationSpeed - 100) / 9);
+    setSpeedTooltipPosition(newSpeedPercentage);
+  }, [params.simulationSpeed]);
 
   // Reset simulation
   const resetSimulation = useCallback(() => {
@@ -167,21 +180,184 @@ export default function RuralHealthcareModel() {
   }, [isRunning, timeStep, params.simulationYears, params.simulationSpeed, calculateStep]);
 
   // Create parameter slider component to reduce repetition
-  const ParameterSlider = ({ label, param, min, max, step = 1 }: { label: string, param: string, min: string, max: string, step?: number }) => (
-    <Form.Group className="mb-3">
-      <Form.Label className="small text-muted">{label}</Form.Label>
-      <div className="d-flex align-items-center gap-2">
-        <Form.Range
-          min={min}
-          max={max}
-          step={step}
-          value={params[param as keyof typeof params]}
-          onChange={(e) => handleParamChange(param, e.target.value)}
-        />
-        <span className="small text-end" style={{ width: "3rem" }}>{Math.round(params[param as keyof typeof params] as number)}</span>
-      </div>
-    </Form.Group>
-  );
+  const ParameterSlider = ({ label, param, min, max, step = 1 }: { label: string, param: string, min: string, max: string, step?: number }) => {
+    // Calculate percentage for the colored progress bar
+    const percentage = ((params[param as keyof typeof params] as number - parseFloat(min)) / (parseFloat(max) - parseFloat(min))) * 100;
+    
+    // State to track if the slider is being dragged
+    const [isDragging, setIsDragging] = useState(false);
+    const [tooltipPosition, setTooltipPosition] = useState(0);
+    
+    // Update tooltip position when slider value changes
+    useEffect(() => {
+      const currentValue = params[param as keyof typeof params] as number;
+      const minValue = parseFloat(min);
+      const maxValue = parseFloat(max);
+      const newPercentage = ((currentValue - minValue) / (maxValue - minValue)) * 100;
+      setTooltipPosition(newPercentage);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [param, min, max, params[param as keyof typeof params]]);
+    
+    // Determine color based on parameter type or value
+    const getSliderColor = () => {
+      // Color mapping based on parameter type
+      const colorMap: {[key: string]: string} = {
+        'initialWorkers': '#0d6efd', // primary blue
+        'initialTrust': '#198754',   // success green
+        'initialHealth': '#dc3545',  // danger red
+        'infrastructureQuality': '#6610f2', // purple
+        'trainingAvailability': '#fd7e14', // orange
+        'careerGrowthOpportunities': '#0dcaf0', // info blue
+        'publicPrivateGap': '#6c757d', // gray
+        'baseHiringRate': '#20c997', // teal
+        'baseMigrationRate': '#ffc107', // yellow
+        'populationServed': '#0d6efd', // primary blue
+        'simulationYears': '#198754', // success green
+      };
+      
+      return colorMap[param] || '#0d6efd'; // default to primary blue
+    };
+    
+    // Get impact description for each parameter
+    const getImpactDescription = () => {
+      const impactMap: {[key: string]: {description: string, positive: boolean}} = {
+        'initialWorkers': {
+          description: 'Workforce',
+          positive: true
+        },
+        'initialTrust': {
+          description: 'Community trust',
+          positive: true
+        },
+        'initialHealth': {
+          description: 'Health outcomes',
+          positive: true
+        },
+        'infrastructureQuality': {
+          description: 'Retention rate & job satisfaction',
+          positive: true
+        },
+        'trainingAvailability': {
+          description: 'Hiring rate',
+          positive: true
+        },
+        'careerGrowthOpportunities': {
+          description: 'Retention rate',
+          positive: true
+        },
+        'publicPrivateGap': {
+          description: 'Migration to urban areas',
+          positive: false
+        },
+        'populationServed': {
+          description: 'Workload per worker',
+          positive: false
+        },
+        'simulationYears': {
+          description: 'Simulation length',
+          positive: true
+        },
+      };
+      
+      return impactMap[param] || {description: '', positive: true};
+    };
+    
+    const impact = getImpactDescription();
+    const color = getSliderColor();
+    
+    return (
+      <Form.Group className="mb-3">
+        <div className="d-flex justify-content-between align-items-center mb-1">
+          <Form.Label className="small text-muted mb-0">{label}</Form.Label>
+          <span className={`small fw-medium ${isDragging ? 'text-primary' : ''}`} style={{ width: "3rem", textAlign: "right" }}>
+            {Math.round(params[param as keyof typeof params] as number)}
+          </span>
+        </div>
+        <div className="position-relative" style={{ height: isDragging ? '40px' : '30px' }}>
+          {isDragging && (
+            <div 
+              className="position-absolute slider-tooltip" 
+              style={{ 
+                left: `calc(${tooltipPosition}% - 15px)`, 
+                top: '-28px',
+                backgroundColor: color,
+                color: 'white',
+                padding: '2px 6px',
+                borderRadius: '4px',
+                fontSize: '0.75rem',
+                fontWeight: 'bold',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                zIndex: 2,
+                transition: 'left 0.1s ease-out'
+              }}
+            >
+              {Math.round(params[param as keyof typeof params] as number)}
+              <div 
+                style={{ 
+                  position: 'absolute', 
+                  bottom: '-4px', 
+                  left: '50%', 
+                  marginLeft: '-4px',
+                  width: '8px', 
+                  height: '8px', 
+                  backgroundColor: color,
+                  transform: 'rotate(45deg)'
+                }}
+              />
+            </div>
+          )}
+          <Form.Range
+            min={min}
+            max={max}
+            step={step}
+            value={params[param as keyof typeof params]}
+            onChange={(e) => handleParamChange(param, e.target.value)}
+            onMouseDown={() => setIsDragging(true)}
+            onMouseUp={() => setIsDragging(false)}
+            onMouseLeave={() => setIsDragging(false)}
+            onTouchStart={() => setIsDragging(true)}
+            onTouchEnd={() => setIsDragging(false)}
+            className={`parameter-slider ${isDragging ? 'active-slider' : ''}`}
+          />
+          <div 
+            className="progress position-absolute top-0 start-0 rounded-pill" 
+            style={{ 
+              height: '0.25rem', 
+              width: '100%', 
+              marginTop: '12px',
+              pointerEvents: 'none',
+              backgroundColor: '#e9ecef',
+              zIndex: -1
+            }}
+          >
+            <div 
+              className="progress-bar" 
+              style={{ 
+                width: `${percentage}%`, 
+                backgroundColor: color,
+                transition: isDragging ? 'none' : 'width 0.3s ease-in-out'
+              }}
+            ></div>
+          </div>
+        </div>
+        <div className="d-flex justify-content-between">
+          <small className="text-muted">{min}</small>
+          <small className="text-muted">{max}</small>
+        </div>
+        {impact.description && (
+          <div className="mt-1 d-flex align-items-center" style={{ height: '18px' }}>
+            <small className="text-muted">Affects: </small>
+            <small className={`ms-1 ${impact.positive ? 'text-success' : 'text-danger'}`}>
+              {impact.description} 
+              <span className="ms-1">
+                {impact.positive ? '↑' : '↓'}
+              </span>
+            </small>
+          </div>
+        )}
+      </Form.Group>
+    );
+  };
 
   // Calculate key insights
   const getInsights = () => {
@@ -323,18 +499,84 @@ export default function RuralHealthcareModel() {
                   Reset
                 </Button>
               </div>
+
               <Form.Group>
-                <Form.Label className="small text-muted">Simulation Speed</Form.Label>
-                <div className="d-flex align-items-center">
-                  <small className="me-2">Slow</small>
+                <div className="d-flex justify-content-between align-items-center mb-1">
+                  <Form.Label className="small text-muted mb-0">Simulation Speed</Form.Label>
+                  <span className={`small fw-medium ${speedDragging ? 'text-primary' : ''}`} style={{ width: "3rem", textAlign: "right" }}>
+                    {Math.round(speedPercentage)}%
+                  </span>
+                </div>
+                <div className="position-relative" style={{ height: speedDragging ? '40px' : '30px' }}>
+                  {speedDragging && (
+                    <div 
+                      className="position-absolute slider-tooltip" 
+                      style={{ 
+                        left: `calc(${speedTooltipPosition}% - 15px)`, 
+                        top: '-28px',
+                        backgroundColor: '#6610f2',
+                        color: 'white',
+                        padding: '2px 6px',
+                        borderRadius: '4px',
+                        fontSize: '0.75rem',
+                        fontWeight: 'bold',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                        zIndex: 2,
+                        transition: 'left 0.1s ease-out'
+                      }}
+                    >
+                      {Math.round(speedPercentage)}%
+                      <div 
+                        style={{ 
+                          position: 'absolute', 
+                          bottom: '-4px', 
+                          left: '50%', 
+                          marginLeft: '-4px',
+                          width: '8px', 
+                          height: '8px', 
+                          backgroundColor: '#6610f2',
+                          transform: 'rotate(45deg)'
+                        }}
+                      />
+                    </div>
+                  )}
                   <Form.Range
                     min="100"
                     max="1000"
                     step="100"
                     value={params.simulationSpeed}
                     onChange={(e) => handleParamChange('simulationSpeed', e.target.value)}
+                    onMouseDown={() => setSpeedDragging(true)}
+                    onMouseUp={() => setSpeedDragging(false)}
+                    onMouseLeave={() => setSpeedDragging(false)}
+                    onTouchStart={() => setSpeedDragging(true)}
+                    onTouchEnd={() => setSpeedDragging(false)}
+                    className={`parameter-slider ${speedDragging ? 'active-slider' : ''}`}
                   />
-                  <small className="ms-2">Fast</small>
+                  <div 
+                    className="progress position-absolute top-0 start-0 rounded-pill" 
+                    style={{ 
+                      height: '0.25rem', 
+                      width: '100%', 
+                      marginTop: '12px',
+                      pointerEvents: 'none',
+                      backgroundColor: '#e9ecef',
+                      zIndex: -1
+                    }}
+                  >
+                    <div 
+                      className="progress-bar" 
+                      style={{ 
+                        width: `${speedPercentage}%`, 
+                        backgroundColor: '#6610f2',
+                        transition: speedDragging ? 'none' : 'width 0.3s ease-in-out'
+                      }}
+                    ></div>
+                  </div>
+                </div>
+                <div className="d-flex justify-content-between">
+                  <small className="text-muted">Slow</small>
+                  <small className="text-muted">Fast</small>
                 </div>
               </Form.Group>
             </Card.Body>
