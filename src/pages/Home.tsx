@@ -79,13 +79,13 @@ const Home: React.FC = () => {
                 ) : (
                   <>
                     <div className="mb-3">
-                      <h5 style={{ color: '#333333', fontWeight: 'bold' }}>Doctor Distribution</h5>
+                      <h5 style={{ color: '#000000', fontWeight: 'bold' }}>Doctor Distribution</h5>
                       <p className="mb-0" style={{ color: '#333333', fontWeight: 'bold' }}>
                         <span style={{ color: '#e63946', fontWeight: 'bold', fontSize: '1.2rem' }}>{doctorData.ratio}x</span> more doctors in urban areas than rural areas
                       </p>
                     </div>
                     <div className="mb-3">
-                      <h5 style={{ color: '#333333', fontWeight: 'bold' }}>Healthcare Access Gap</h5>
+                      <h5 style={{ color: '#000000', fontWeight: 'bold' }}>Healthcare Access Gap</h5>
                       <p className="mb-0" style={{ color: '#333333', fontWeight: 'bold' }}>
                         <span style={{ color: '#e63946', fontWeight: 'bold', fontSize: '1.2rem' }}>{accessData.gap}%</span> difference in healthcare access between urban and rural areas
                       </p>
