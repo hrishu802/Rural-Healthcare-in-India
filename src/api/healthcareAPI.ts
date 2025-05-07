@@ -533,6 +533,29 @@ export const getHealthIndicators = async (
           });
         }
       }
+      // If API calls succeed but data is missing, set default values
+      if (transformedData.length === 0) {
+        transformedData = [
+          { 
+            year: 2022, 
+            state: 'All India', 
+            rural: true, 
+            infantMortalityRate: 40,
+            maternalMortalityRate: 130,
+            lifeExpectancy: 68,
+            accessToHealthcare: 65
+          },
+          { 
+            year: 2022, 
+            state: 'All India', 
+            rural: false, 
+            infantMortalityRate: 25,
+            maternalMortalityRate: 90,
+            lifeExpectancy: 72,
+            accessToHealthcare: 85
+          }
+        ];
+      }
     } catch (innerError) {
       console.error('Error fetching real health indicator data:', innerError);
       // Set transformed data to mock data on API failure instead of returning directly
