@@ -2,43 +2,47 @@
 
 **Built independently as a data-driven healthcare analytics project.**
 
-A project focused on analyzing **rural healthcare challenges in India** using data science techniques to uncover gaps in infrastructure, workforce, and accessibility.
+---
+
+## 🔗 Live Demo
+
+* 🌐 **Live App:** https://rural-healthcare-in-india.vercel.app/
 
 ---
 
 ## 🎯 Problem Statement
 
-Rural healthcare in India faces critical challenges:
+Rural healthcare in India faces major challenges:
 
 * Shortage of medical professionals
-* Lack of hospitals and infrastructure
-* Uneven distribution of healthcare resources
+* Limited healthcare infrastructure
+* Uneven distribution of hospitals and resources
 
-These issues lead to **limited access to quality healthcare** for a large population.
+These issues result in **restricted access to quality healthcare** for a large population.
 
-👉 The challenge is to analyze existing data and identify **key gaps and patterns**.
+👉 The goal is to analyze data and identify **critical gaps and patterns**.
 
 ---
 
 ## 💡 Solution
 
-This project uses **data analysis and machine learning techniques** to:
+This project uses data analysis techniques to:
 
-* Study healthcare infrastructure (hospitals, beds, etc.)
+* Study healthcare infrastructure and availability
 * Identify shortages and disparities
-* Extract meaningful insights from datasets
+* Generate meaningful insights from datasets
 
-The goal is to convert raw healthcare data into **actionable insights for better decision-making**.
+It transforms raw data into **actionable insights for better understanding and decision-making**.
 
 ---
 
 ## ✨ Features
 
-* 📊 Exploratory Data Analysis (EDA) on rural healthcare datasets
-* 📈 Visualization of healthcare trends and gaps
-* 🧠 Machine Learning models for prediction (if applicable)
-* 📍 Insights on hospitals, beds, and workforce distribution
-* 📉 Identification of shortages and problem areas
+* 📊 Exploratory Data Analysis (EDA)
+* 📈 Data visualization of healthcare trends
+* 📍 Insights on hospitals, beds, and workforce
+* 📉 Identification of shortages and gaps
+* 📱 Clean and interactive interface (if deployed as app)
 
 ---
 
@@ -47,20 +51,18 @@ The goal is to convert raw healthcare data into **actionable insights for better
 * **Language:** Python
 * **Libraries:** Pandas, NumPy
 * **Visualization:** Matplotlib, Seaborn
-* **Machine Learning:** Scikit-learn / TensorFlow (if used)
-* **Platform:** Jupyter Notebook / Kaggle
+* **Platform:** Jupyter Notebook / Web Deployment
 
 ---
 
 ## 📂 Project Structure
 
-```id="gk2a9d"
+```id="r2k91x"
 Rural-Healthcare-in-India/
 │── notebooks/
-│   ├── data_analysis.ipynb
-│   ├── healthcare_models.ipynb
 │── datasets/
 │── visuals/
+│── app/ (if deployed)
 │── README.md
 ```
 
@@ -68,12 +70,11 @@ Rural-Healthcare-in-India/
 
 ## 📊 How It Works
 
-1. Collect healthcare datasets (rural stats, hospitals, beds, etc.)
+1. Collect healthcare datasets
 2. Perform data cleaning and preprocessing
 3. Conduct exploratory data analysis
-4. Visualize trends and patterns
-5. Apply ML models (if applicable)
-6. Generate insights on healthcare gaps
+4. Visualize patterns and trends
+5. Extract insights on healthcare gaps
 
 ---
 
@@ -81,60 +82,59 @@ Rural-Healthcare-in-India/
 
 * Uneven distribution of healthcare facilities across regions
 * Significant shortage of hospital beds in rural areas
-* Workforce gaps affecting healthcare delivery
-* Data-driven identification of high-need regions
+* Workforce gaps impacting service delivery
+* Identification of high-need regions using data
 
 ---
 
 ## 📚 Key Learnings
 
 * Real-world data analysis in healthcare domain
-* Handling large datasets using Pandas
-* Data visualization for decision-making
-* Applying ML models to social impact problems
+* Data preprocessing and cleaning techniques
+* Visualization for decision-making
+* Applying analytics to social impact problems
 
 ---
 
 ## 🌍 Impact
 
 * Highlights critical issues in rural healthcare
-* Supports data-driven policy understanding
-* Demonstrates use of technology in social good
+* Supports data-driven understanding of challenges
+* Demonstrates application of data science in social good
 
 ---
 
 ## 🔮 Future Improvements
 
-* Integration with real-time healthcare datasets
-* Predictive modeling for resource allocation
-* Dashboard for interactive insights
+* Real-time healthcare data integration
+* Predictive models for resource allocation
+* Interactive dashboard
 * AI-based healthcare recommendations
 
 ---
 
-## 🧪 Interview Questions (Based on This Project)
+## 🧪 Interview Questions
 
 **Technical**
 
-* How did you clean and preprocess the data?
-* Which ML models did you use and why?
-* How did you handle missing or inconsistent data?
+* How did you clean and preprocess the dataset?
+* What visualization techniques did you use?
 
 **Conceptual**
 
-* What are the biggest challenges in rural healthcare?
+* What are the biggest rural healthcare challenges?
 * How can data improve healthcare systems?
 
 **System Design**
 
-* How would you scale this into a real-world system?
+* How would you scale this into a national dashboard?
 * How would you integrate government healthcare APIs?
 
 ---
 
 ## 🗣️ 30-Second Interview Pitch
 
-"I built a Rural Healthcare Analysis project to understand the gaps in India’s rural healthcare system using data science. I performed exploratory data analysis on datasets related to hospitals, beds, and workforce, and used visualization techniques to identify key shortages and disparities. This project shows my ability to work with real-world datasets and extract meaningful insights for social impact."
+"I built a Rural Healthcare Analysis project to study gaps in India’s rural healthcare system using data analysis. I worked with datasets related to hospitals, beds, and workforce distribution, and used visualization techniques to identify shortages and disparities. This project demonstrates my ability to extract meaningful insights from real-world data and apply them to socially impactful problems."
 
 ---
 
@@ -148,13 +148,13 @@ Rural-Healthcare-in-India/
 
 ## 🧠 Ownership
 
-This project was independently designed and developed end-to-end, including:
+This project was independently developed end-to-end, including:
 
 * Problem research
 * Data collection and preprocessing
 * Analysis and visualization
-* Model implementation (if used)
 * Insight generation
+* Deployment
 
 ---
 
